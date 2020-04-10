@@ -9,7 +9,7 @@ public interface Processor<T> {
     /**
      * @return processor id, immutable, unique among all instances, not null
      */
-    String getId();
+    int getId();
 
     /**
      * @return a list of processors that have to be executed before this one
