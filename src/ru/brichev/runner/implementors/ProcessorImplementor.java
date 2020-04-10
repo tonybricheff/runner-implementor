@@ -6,6 +6,7 @@ import ru.brichev.runner.modules.ProcessorException;
 import java.util.List;
 
 
+
 public class ProcessorImplementor implements Processor {
 
     private final int pid;
@@ -31,7 +32,13 @@ public class ProcessorImplementor implements Processor {
         if(input.isEmpty()) {
             return null;
         }
-        return null;
+
+        int resultOfTreatment = 0;
+
+        for(int i = 0; i < input.size(); i++){
+            resultOfTreatment += (int)input.get(i);
+        }
+        return resultOfTreatment;
     }
 
 }
