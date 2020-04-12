@@ -13,7 +13,7 @@ public class RunnerImplementor<T> implements Runner<T> {
     public Map<String, List<T>> runProcessors(Set<Processor<T>> processors, int maxThreads, int maxIterations) throws ProcessorException, InterruptedException {
 
         Map<String, List<T>> results = new HashMap<>();
-        DependencyGraph dependencyGraph = new DependencyGraph(processors);
+        DependencyGraph<T> dependencyGraph = new DependencyGraph<>(processors);
         dependencyGraph.printGraph();
         System.out.println(dependencyGraph.getProcessorsOrder());
 
@@ -25,13 +25,13 @@ public class RunnerImplementor<T> implements Runner<T> {
         return null;
     }
 
-    private void parallelWork(int threads, Set<Processor> processorsSet, Map<String, List> resultsMap) throws InterruptedException {
+    private void parallelWork(int threads, Set<Processor<T>> processorsSet, Map<String, List<T>> resultsMap) throws InterruptedException {
 
         if (threads == 0) {
             throw new IllegalArgumentException("There are 0 threads");
         }
 
-        List<Processor> listOfProcessors = new ArrayList<>(processorsSet);
+        List<Processor<T>> listOfProcessors = new ArrayList<>(processorsSet);
         listOfProcessors.sort(Comparator.comparingInt(processor -> processor.getInputIds().size()));
 
         int threadsCounter = Math.max(1, Math.min(listOfProcessors.size(), threads));
@@ -39,7 +39,7 @@ public class RunnerImplementor<T> implements Runner<T> {
         int restCounter = listOfProcessors.size() % threadsCounter;
 
         List<Thread> workers = new ArrayList<>();
-        final List results = new ArrayList<>(Collections.nCopies(threadsCounter, null));
+        final List<T> results = new ArrayList<>(Collections.nCopies(threadsCounter, null));
         for (int i = 0; i < threadsCounter; i++) {
             final int index = i;
             workers.add(new Thread(() -> System.out.println(listOfProcessors.get(index).getId())));
