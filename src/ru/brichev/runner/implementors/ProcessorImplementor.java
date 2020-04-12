@@ -1,7 +1,7 @@
 package ru.brichev.runner.implementors;
 
 import ru.brichev.runner.interfaces.Processor;
-import ru.brichev.runner.modules.ProcessorException;
+import ru.brichev.runner.models.ProcessorException;
 
 import java.util.List;
 

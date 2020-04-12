@@ -2,11 +2,10 @@ package ru.brichev.runner.implementors;
 
 import ru.brichev.runner.interfaces.Processor;
 import ru.brichev.runner.interfaces.Runner;
-import ru.brichev.runner.modules.ProcessorException;
+import ru.brichev.runner.models.DependencyGraph;
+import ru.brichev.runner.models.ProcessorException;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class RunnerImplementor implements Runner {
 
@@ -14,10 +13,19 @@ public class RunnerImplementor implements Runner {
     public Map<String, List> runProcessors(Set processors, int maxThreads, int maxIterations) throws ProcessorException, InterruptedException {
 
         Map<String, List> results = new HashMap<>();
+        DependencyGraph dependencyGraph = new DependencyGraph(processors);
+        dependencyGraph.printGraph();
+        try {
+            System.out.println(dependencyGraph.getProcessorsOrder());
+        }catch (ProcessorException e){
+            System.out.println("Exception: " + e.getMessage());
+        }
 
-        for (int i = 0; i < maxIterations; i++) {
+
+        /*for (int i = 0; i < maxIterations; i++) {
             parallelWork(maxThreads, processors, results);
         }
+         */
 
         return null;
     }

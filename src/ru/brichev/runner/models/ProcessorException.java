@@ -1,4 +1,4 @@
-package ru.brichev.runner.modules;
+package ru.brichev.runner.models;
 
 public class ProcessorException extends Exception {
 

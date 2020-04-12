@@ -1,6 +1,6 @@
 package ru.brichev.runner.interfaces;
 
-import ru.brichev.runner.modules.ProcessorException;
+import ru.brichev.runner.models.ProcessorException;
 
 import java.util.List;
 import java.util.Map;
