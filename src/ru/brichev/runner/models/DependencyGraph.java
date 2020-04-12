@@ -4,19 +4,19 @@ import ru.brichev.runner.implementors.ProcessorImplementor;
 
 import java.util.*;
 
-public class DependencyGraph {
+public class DependencyGraph<T> {
     private final int numVertices;
     private LinkedList<Integer>[] adjLists;
     private boolean cycle;
     private final int[] used;
     private final List<Integer> topsorted;
 
-    public DependencyGraph(Set<ProcessorImplementor> processors) throws ProcessorException {
+    public DependencyGraph(Set<ProcessorImplementor<T>> processors) throws ProcessorException {
         this.numVertices = processors.size();
         this.used = new int[numVertices];
         this.topsorted = new ArrayList<>();
         resize(numVertices);
-        for (ProcessorImplementor processor : processors) {
+        for (ProcessorImplementor<T> processor : processors) {
             for (String inputId : processor.getInputIds()) {
                 if (Integer.parseInt(inputId) > numVertices || Integer.parseInt(inputId) < 1) {
                     throw new ProcessorException("Invalid inputId detected: " + inputId, Integer.parseInt(inputId));

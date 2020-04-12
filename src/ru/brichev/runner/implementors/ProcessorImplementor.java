@@ -7,7 +7,7 @@ import java.util.List;
 
 
 
-public class ProcessorImplementor implements Processor {
+public class ProcessorImplementor<T> implements Processor<T> {
 
     private final int pid;
     private final List<String> inputIds;
@@ -28,16 +28,12 @@ public class ProcessorImplementor implements Processor {
     }
 
     @Override
-    public Object process(List input) throws ProcessorException {
+    public T process(List<T> input) throws ProcessorException {
         if(input.isEmpty()) {
             return null;
         }
+        T resultOfTreatment = null;
 
-        int resultOfTreatment = 0;
-
-        for(int i = 0; i < input.size(); i++){
-            resultOfTreatment += (int)input.get(i);
-        }
         return resultOfTreatment;
     }
 

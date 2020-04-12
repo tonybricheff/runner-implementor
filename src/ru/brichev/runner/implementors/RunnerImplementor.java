@@ -7,12 +7,12 @@ import ru.brichev.runner.models.ProcessorException;
 
 import java.util.*;
 
-public class RunnerImplementor implements Runner {
+public class RunnerImplementor<T> implements Runner<T> {
 
     @Override
-    public Map<String, List> runProcessors(Set processors, int maxThreads, int maxIterations) throws ProcessorException, InterruptedException {
+    public Map<String, List<T>> runProcessors(Set<Processor<T>> processors, int maxThreads, int maxIterations) throws ProcessorException, InterruptedException {
 
-        Map<String, List> results = new HashMap<>();
+        Map<String, List<T>> results = new HashMap<>();
         DependencyGraph dependencyGraph = new DependencyGraph(processors);
         dependencyGraph.printGraph();
         System.out.println(dependencyGraph.getProcessorsOrder());
@@ -25,7 +25,7 @@ public class RunnerImplementor implements Runner {
         return null;
     }
 
-    private void  parallelWork(int threads, Set<Processor> processorsSet, Map<String, List> resultsMap) throws InterruptedException {
+    private void parallelWork(int threads, Set<Processor> processorsSet, Map<String, List> resultsMap) throws InterruptedException {
 
         if (threads == 0) {
             throw new IllegalArgumentException("There are 0 threads");
