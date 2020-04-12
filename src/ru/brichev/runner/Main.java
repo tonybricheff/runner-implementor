@@ -23,7 +23,6 @@ public class Main {
         List<String> list3 = new ArrayList<>();
         list3.add("1");
         list3.add("4");
-        list3.add("2");
         List<String> list4 = new ArrayList<>();
 
         ProcessorImplementor processorImplementor1 = new ProcessorImplementor(1, list1);
