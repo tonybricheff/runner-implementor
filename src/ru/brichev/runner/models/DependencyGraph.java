@@ -27,24 +27,14 @@ public class DependencyGraph {
         }
     }
 
-    public void resize(int n) {
+    private void resize(int n) {
         adjLists = new LinkedList[n];
         for (int i = 0; i < numVertices; i++)
             adjLists[i] = new LinkedList<>();
     }
 
-    public void addEdge(Integer from, Integer to) {
+    private void addEdge(Integer from, Integer to) {
         adjLists[from].add(to);
-    }
-
-    public void printGraph() {
-        for (int i = 0; i < numVertices; i++) {
-            System.out.print(i + 1 + " : ");
-            for (int j = 0; j < adjLists[i].size(); j++) {
-                System.out.print(adjLists[i].get(j) + 1 + " ");
-            }
-            System.out.println();
-        }
     }
 
     private void dfs(int v) {
@@ -85,6 +75,16 @@ public class DependencyGraph {
 
     public Integer get(int from, int to) {
         return adjLists[from].get(to);
+    }
+
+    public void printGraph() {
+        for (int i = 0; i < numVertices; i++) {
+            System.out.print(i + 1 + " : ");
+            for (int j = 0; j < adjLists[i].size(); j++) {
+                System.out.print(adjLists[i].get(j) + 1 + " ");
+            }
+            System.out.println();
+        }
     }
 
 }

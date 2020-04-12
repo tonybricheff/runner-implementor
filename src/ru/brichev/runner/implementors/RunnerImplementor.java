@@ -15,12 +15,7 @@ public class RunnerImplementor implements Runner {
         Map<String, List> results = new HashMap<>();
         DependencyGraph dependencyGraph = new DependencyGraph(processors);
         dependencyGraph.printGraph();
-        try {
-            System.out.println(dependencyGraph.getProcessorsOrder());
-        }catch (ProcessorException e){
-            System.out.println("Exception: " + e.getMessage());
-        }
-
+        System.out.println(dependencyGraph.getProcessorsOrder());
 
         /*for (int i = 0; i < maxIterations; i++) {
             parallelWork(maxThreads, processors, results);
