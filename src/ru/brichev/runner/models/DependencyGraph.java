@@ -10,7 +10,7 @@ public class DependencyGraph<T> {
     private boolean cycle;
     private final int[] used;
     private final List<Processor<T>> topsorted;
-    private Map<Integer, Processor<T>> processorIds;
+    private Map<String, Processor<T>> processorIds;
 
     public DependencyGraph(Set<Processor<T>> processors) throws ProcessorException {
         this.numVertices = processors.size();
@@ -23,7 +23,7 @@ public class DependencyGraph<T> {
                 if (Integer.parseInt(inputId) > numVertices || Integer.parseInt(inputId) < 1) {
                     throw new ProcessorException("Invalid inputId detected: " + inputId, Integer.parseInt(inputId));
                 } else {
-                    addEdge(Integer.parseInt(inputId) - 1, processor.getId() - 1);
+                    addEdge(Integer.parseInt(inputId) - 1, Integer.parseInt(processor.getId()) - 1);
                 }
             }
         }
@@ -50,7 +50,7 @@ public class DependencyGraph<T> {
                 cycle = true;
         }
         used[v] = 2;
-        topsorted.add(processorIds.get(v + 1));
+        topsorted.add(processorIds.get(String.valueOf(v + 1)));
     }
 
     private void topsort() {
