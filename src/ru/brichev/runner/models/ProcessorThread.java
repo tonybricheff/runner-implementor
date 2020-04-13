@@ -6,22 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessorThread<T> extends Thread {
-    private final List<String> inputIds;
     private final DataStore<T> dataStore;
-    private final Processor<T> processor;
-    private List<T> input;
+    private final List<Processor<T>> processors;
+    private final List<T> input;
 
-    public ProcessorThread(Processor<T> processor, List<String> inputIds, DataStore<T> dataStore) {
-        this.processor = processor;
-        this.inputIds = inputIds;
+    public ProcessorThread(List<Processor<T>> processors, DataStore<T> dataStore) {
+        this.processors = processors;
         this.dataStore = dataStore;
         this.input = new ArrayList<>();
-
     }
 
-    private boolean getStatus() {
+    private boolean getStatus(Processor<T> processor) {
         input.clear();
-        for (String id : inputIds) {
+        for (String id : processor.getInputIds()) {
             T idOut = dataStore.get(id);
             if (idOut == null) {
                 return false;
@@ -32,9 +29,9 @@ public class ProcessorThread<T> extends Thread {
         return true;
     }
 
-    private void getInput() {
+    private void getInput(Processor<T> processor) {
         input.clear();
-        for (String id : inputIds) {
+        for (String id : processor.getInputIds()) {
             T idOut = dataStore.get(id);
             input.add(idOut);
         }
@@ -44,23 +41,25 @@ public class ProcessorThread<T> extends Thread {
 
     @Override
     public void run() {
-        while (!getStatus()) {
-            Thread.yield();
-        }
-        getInput();
-        System.out.println(getName() + " " + processor.getId() + " " + input + " " + processor.getLast());
-        try {
-            if (input == null) {
-                dataStore.add(processor.getId(), (T) processor.process(new ArrayList<>()));
-                processor.setLast(1);
-            } else {
-                getInput();
-                input.add((T) processor.getLast());
-                dataStore.add(processor.getId(), (T) processor.process(input));
-                processor.setLast(processor.process(input));
+        for(Processor<T> processor : processors) {
+            while (!getStatus(processor)) {
+                Thread.yield();
             }
-        } catch (ProcessorException e) {
-            e.printStackTrace();
+            // getInput();
+            System.out.println(getName() + " " + processor.getId() + " " + input + " " + processor.getLast());
+            try {
+                if (input == null) {
+                    dataStore.add(processor.getId(), (T) processor.process(new ArrayList<>()));
+                    processor.setLast(1);
+                } else {
+                    getInput(processor);
+                    input.add((T) processor.getLast());
+                    dataStore.add(processor.getId(), (T) processor.process(input));
+                    processor.setLast(processor.process(input));
+                }
+            } catch (ProcessorException e) {
+                e.printStackTrace();
+            }
         }
     }
 

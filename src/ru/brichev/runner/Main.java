@@ -43,7 +43,7 @@ public class Main {
         set.add(processorImplementor4);
 
         try {
-            runnerImplementor.runProcessors(set, 4, 1);
+            runnerImplementor.runProcessors(set, 9, 5);
         }catch (InterruptedException | ProcessorException e){
             System.out.println(e.getMessage());
         }
