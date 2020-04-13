@@ -2,6 +2,7 @@ package ru.brichev.runner.implementors;
 
 import ru.brichev.runner.interfaces.Processor;
 import ru.brichev.runner.interfaces.Runner;
+import ru.brichev.runner.models.DataStore;
 import ru.brichev.runner.models.DependencyGraph;
 import ru.brichev.runner.models.ProcessorException;
 import ru.brichev.runner.models.ProcessorThread;
@@ -11,7 +12,7 @@ import java.util.*;
 
 public class RunnerImplementor<T> implements Runner<T> {
 
-    
+
     @Override
     public Map<String, List<T>> runProcessors(Set<Processor<T>> processors, int maxThreads, int maxIterations) throws ProcessorException, InterruptedException {
 
@@ -54,11 +55,12 @@ public class RunnerImplementor<T> implements Runner<T> {
             l = r;
         }
 
+        DataStore<String> dataStore = new DataStore<>();
         List<ProcessorThread> workers = new ArrayList<>();
         final List<T> results = new ArrayList<>(Collections.nCopies(threadsCounter, null));
         for (int i = 0; i < threadsCounter; i++) {
             final int index = i;
-            workers.add(new ProcessorThread(runOrder.get(index).getInputIds())); //решить вопрос с потоками(если меньше)
+            workers.add(new ProcessorThread(partitions.get(index).get(0).getId(),partitions.get(index).get(0).getInputIds(), dataStore)); //решить вопрос с потоками(если меньше)
             workers.get(i).start();
         }
 

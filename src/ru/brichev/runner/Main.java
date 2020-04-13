@@ -42,7 +42,7 @@ public class Main {
         set.add(processorImplementor3);
         set.add(processorImplementor4);
         try {
-            runnerImplementor.runProcessors(set, 10, 1);
+            runnerImplementor.runProcessors(set, 10, 2);
         }catch (InterruptedException | ProcessorException e){
             System.out.println(e.getMessage());
         }
