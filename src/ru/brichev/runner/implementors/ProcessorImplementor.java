@@ -37,4 +37,13 @@ public class ProcessorImplementor<T> implements Processor<T> {
         return resultOfTreatment;
     }
 
+    public int process() throws ProcessorException {
+
+        return pid;
+    }
+
+    @Override
+    public String toString() {
+        return pid + " ";
+    }
 }
