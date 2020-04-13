@@ -14,35 +14,35 @@ public class RunnerImplementor<T> implements Runner<T> {
 
         Map<String, List<T>> results = new HashMap<>();
         DependencyGraph<T> dependencyGraph = new DependencyGraph<>(processors);
-        dependencyGraph.printGraph();
-        System.out.println(dependencyGraph.getProcessorsOrder());
+        List<Processor<T>> runOrder = dependencyGraph.getProcessorsOrder();
+        
+        /*
+        for(Processor<T> processor : runOrder)
+            System.out.print(processor.getId() + " ");
 
-        /*for (int i = 0; i < maxIterations; i++) {
-            parallelWork(maxThreads, processors, results);
-        }
          */
+
+        for (int i = 0; i < maxIterations; i++) {
+            parallelWork(maxThreads, runOrder, results);
+        }
+
 
         return null;
     }
 
-    private void parallelWork(int threads, Set<Processor<T>> processorsSet, Map<String, List<T>> resultsMap) throws InterruptedException {
+    private void parallelWork(int threads, List<Processor<T>> runOrder, Map<String, List<T>> resultsMap) throws InterruptedException {
 
         if (threads == 0) {
             throw new IllegalArgumentException("There are 0 threads");
         }
 
-        List<Processor<T>> listOfProcessors = new ArrayList<>(processorsSet);
-        listOfProcessors.sort(Comparator.comparingInt(processor -> processor.getInputIds().size()));
-
-        int threadsCounter = Math.max(1, Math.min(listOfProcessors.size(), threads));
-        int partSize = listOfProcessors.size() / threadsCounter;
-        int restCounter = listOfProcessors.size() % threadsCounter;
+        int threadsCounter = Math.max(1, Math.min(runOrder.size(), threads));
 
         List<Thread> workers = new ArrayList<>();
         final List<T> results = new ArrayList<>(Collections.nCopies(threadsCounter, null));
         for (int i = 0; i < threadsCounter; i++) {
             final int index = i;
-            workers.add(new Thread(() -> System.out.println(listOfProcessors.get(index).getId())));
+            workers.add(new Thread(() -> System.out.println(Thread.currentThread().toString() + " " + runOrder.get(index).getId())));
             workers.get(i).start();
         }
 

@@ -9,7 +9,8 @@ public class DependencyGraph<T> {
     private LinkedList<Integer>[] adjLists;
     private boolean cycle;
     private final int[] used;
-    private final List<Integer> topsorted;
+    private final List<Processor<T>> topsorted;
+    private Map<Integer, Processor<T>> processorIds;
 
     public DependencyGraph(Set<Processor<T>> processors) throws ProcessorException {
         this.numVertices = processors.size();
@@ -17,6 +18,7 @@ public class DependencyGraph<T> {
         this.topsorted = new ArrayList<>();
         resize(numVertices);
         for (Processor<T> processor : processors) {
+            processorIds.put(processor.getId(), processor);
             for (String inputId : processor.getInputIds()) {
                 if (Integer.parseInt(inputId) > numVertices || Integer.parseInt(inputId) < 1) {
                     throw new ProcessorException("Invalid inputId detected: " + inputId, Integer.parseInt(inputId));
@@ -29,6 +31,7 @@ public class DependencyGraph<T> {
 
     private void resize(int n) {
         adjLists = new LinkedList[n];
+        processorIds = new HashMap<>(n);
         for (int i = 0; i < numVertices; i++)
             adjLists[i] = new LinkedList<>();
     }
@@ -47,7 +50,7 @@ public class DependencyGraph<T> {
                 cycle = true;
         }
         used[v] = 2;
-        topsorted.add(v + 1);
+        topsorted.add(processorIds.get(v + 1));
     }
 
     private void topsort() {
@@ -60,7 +63,7 @@ public class DependencyGraph<T> {
 
     }
 
-    public List<Integer> getProcessorsOrder() throws ProcessorException {
+    public List<Processor<T>> getProcessorsOrder() throws ProcessorException {
         topsort();
         if (cycle) {
             throw new ProcessorException("Cycle detected", 0);
