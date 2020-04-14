@@ -41,10 +41,15 @@ public class ProcessorImplementor<T extends Integer> implements Processor<T> {
 
     @Override
     public Integer process(List<T> input) throws ProcessorException {
+
         int result = 1;
         for(T out : input){
             result += out.intValue();
         }
+        if(result == 18)
+            throw new ProcessorException("Тест", pid);
+        //if(result == 19)
+          //  return null;
         return result;
     }
 

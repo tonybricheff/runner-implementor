@@ -2,9 +2,9 @@ package ru.brichev.runner.models;
 
 public class ProcessorException extends Exception {
 
-    private int processorId;
+    private String processorId;
 
-    public ProcessorException(String message, int processorId) {
+    public ProcessorException(String message, String processorId) {
         super(message);
         this.processorId = processorId;
     }

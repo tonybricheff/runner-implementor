@@ -5,10 +5,7 @@ import ru.brichev.runner.implementors.RunnerImplementor;
 import ru.brichev.runner.interfaces.Processor;
 import ru.brichev.runner.models.ProcessorException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
 
@@ -22,7 +19,7 @@ public class Main {
         list2.add("1");
         list2.add("4");
         List<String> list3 = new ArrayList<>();
-        list3.add("4");
+        //list3.add("4");
         List<String> list4 = new ArrayList<>();
 
         ProcessorImplementor<Integer> processorImplementor1 = new ProcessorImplementor<>("1", list1);
@@ -42,8 +39,17 @@ public class Main {
         set.add(processorImplementor3);
         set.add(processorImplementor4);
 
+
+        Map<String, List<Integer>> results;
         try {
-            runnerImplementor.runProcessors(set, 9, 5);
+           results = runnerImplementor.runProcessors(set, 2, 5);
+            for (Map.Entry<String, List<Integer>> entry : results.entrySet()) {
+                System.out.print(entry.getKey() + ") ");
+                for (Integer it : entry.getValue()) {
+                    System.out.print(it + " ");
+                }
+                System.out.println();
+            }
         }catch (InterruptedException | ProcessorException e){
             System.out.println(e.getMessage());
         }

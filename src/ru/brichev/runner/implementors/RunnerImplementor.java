@@ -8,6 +8,7 @@ import ru.brichev.runner.models.ProcessorException;
 import ru.brichev.runner.models.ProcessorThread;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 
 public class RunnerImplementor<T> implements Runner<T> {
@@ -22,7 +23,7 @@ public class RunnerImplementor<T> implements Runner<T> {
         DataStore<T> dataStore = new DataStore<>(results);
 
 
-        for(Processor<T> processor : runOrder)
+        for (Processor<T> processor : runOrder)
             System.out.print(processor.getId() + " ");
         System.out.println();
 
@@ -31,6 +32,8 @@ public class RunnerImplementor<T> implements Runner<T> {
         }
 
         List<ProcessorThread<T>> workers = new ArrayList<>();
+
+        ExecutorService executorService;
 
         int threadsCounter = Math.max(1, Math.min(runOrder.size(), maxThreads));
         int partSize = runOrder.size() / threadsCounter;
@@ -43,16 +46,23 @@ public class RunnerImplementor<T> implements Runner<T> {
             l = r;
         }
         for (int i = 0; i < threadsCounter; i++) {
-            workers.add(new ProcessorThread<>(partitions.get(i), dataStore));
+            workers.add(new ProcessorThread<>(partitions.get(i), dataStore, maxIterations));
         }
 
-        for (int i = 0; i < maxIterations; i++) {
-            parallelWork(threadsCounter, workers);
+        dataStore.setProcessorThreads(workers);
+
+        for (int i = 0; i < threadsCounter; i++) {
+            workers.get(i).start();
         }
 
-        for(Map.Entry<String, List<T>> entry: results.entrySet()){
+
+        for (int i = 0; i < threadsCounter; i++) {
+            workers.get(i).join();
+        }
+
+        for (Map.Entry<String, List<T>> entry : results.entrySet()) {
             System.out.print(entry.getKey() + ") ");
-            for(T it : entry.getValue()){
+            for (T it : entry.getValue()) {
                 System.out.print(it + " ");
             }
             System.out.println();
@@ -61,21 +71,5 @@ public class RunnerImplementor<T> implements Runner<T> {
         return null;
     }
 
-
-    private void parallelWork(int threadsCounter, List<ProcessorThread<T>> workers) throws InterruptedException {
-
-
-        for (int i = 0; i < threadsCounter; i++) {
-            workers.get(i).run();
-        }
-
-        for (int i = 0; i < threadsCounter; i++) {
-            workers.get(i).join();
-        }
-
-        System.out.println();
-
-
-    }
 
 }

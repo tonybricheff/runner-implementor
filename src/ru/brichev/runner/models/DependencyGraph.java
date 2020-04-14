@@ -21,7 +21,7 @@ public class DependencyGraph<T> {
             processorIds.put(processor.getId(), processor);
             for (String inputId : processor.getInputIds()) {
                 if (Integer.parseInt(inputId) > numVertices || Integer.parseInt(inputId) < 1) {
-                    throw new ProcessorException("Invalid inputId detected: " + inputId, Integer.parseInt(inputId));
+                    throw new ProcessorException("Invalid inputId detected: " + inputId, inputId);
                 } else {
                     addEdge(Integer.parseInt(inputId) - 1, Integer.parseInt(processor.getId()) - 1);
                 }
@@ -66,7 +66,7 @@ public class DependencyGraph<T> {
     public List<Processor<T>> getProcessorsOrder() throws ProcessorException {
         topsort();
         if (cycle) {
-            throw new ProcessorException("Cycle detected", 0);
+            throw new ProcessorException("Cycle detected", "");
         }
 
         return topsorted;
