@@ -51,10 +51,8 @@ public class ProcessorThread<T> implements Callable<T> {
                 }
                 System.out.println(Thread.currentThread().toString() + " processor: " + processor.getId() + " iteration: " + (currentIteration + 1));
                 getInput(processor);
-                input.add((T) processor.getLast());
-                result = (T) processor.process(input);
+                result = processor.process(input);
                 dataStore.add(processor.getId(), currentIteration, result);
-                processor.setLast(processor.process(input));
             }
         }
         return null;

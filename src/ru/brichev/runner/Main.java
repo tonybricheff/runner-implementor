@@ -20,16 +20,16 @@ public class Main {
         list2.add("1");
         list2.add("4");
         List<String> list3 = new ArrayList<>();
-        //list3.add("4");
+        list3.add("4");
         List<String> list4 = new ArrayList<>();
 
-        ProcessorImplementor<Integer> processorImplementor1 = new ProcessorImplementor<>("1", list1);
+        ProcessorImplementor processorImplementor1 = new ProcessorImplementor("1", list1);
 
-        ProcessorImplementor<Integer> processorImplementor2 = new ProcessorImplementor<>("2", list2);
+        ProcessorImplementor processorImplementor2 = new ProcessorImplementor("2", list2);
 
-        ProcessorImplementor<Integer> processorImplementor3 = new ProcessorImplementor<>("3", list3);
+        ProcessorImplementor processorImplementor3 = new ProcessorImplementor("3", list3);
 
-        ProcessorImplementor<Integer> processorImplementor4 = new ProcessorImplementor<>("4", list4);
+        ProcessorImplementor processorImplementor4 = new ProcessorImplementor("4", list4);
 
         RunnerImplementor<Integer> runnerImplementor = new RunnerImplementor<>();
 

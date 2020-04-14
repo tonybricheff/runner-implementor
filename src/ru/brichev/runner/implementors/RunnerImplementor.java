@@ -49,7 +49,7 @@ public class RunnerImplementor<T> implements Runner<T> {
 
         try {
             for (int i = 0; i < threadsCounter; i++) {
-                futures.add(executorService.submit(new ProcessorThread<T>(partitions.get(i), dataStore, maxIterations)));
+                futures.add(executorService.submit(new ProcessorThread<>(partitions.get(i), dataStore, maxIterations)));
             }
 
             executorService.shutdown();
