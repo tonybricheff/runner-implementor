@@ -7,6 +7,7 @@ import ru.brichev.runner.models.ProcessorException;
 
 import java.util.*;
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -19,7 +20,7 @@ public class Main {
         list2.add("1");
         list2.add("4");
         List<String> list3 = new ArrayList<>();
-        list3.add("4");
+        //list3.add("4");
         List<String> list4 = new ArrayList<>();
 
         ProcessorImplementor<Integer> processorImplementor1 = new ProcessorImplementor<>("1", list1);
@@ -42,7 +43,8 @@ public class Main {
 
         Map<String, List<Integer>> results;
         try {
-           results = runnerImplementor.runProcessors(set, 2, 5);
+           results = runnerImplementor.runProcessors(set, 4, 5);
+
             for (Map.Entry<String, List<Integer>> entry : results.entrySet()) {
                 System.out.print(entry.getKey() + ") ");
                 for (Integer it : entry.getValue()) {
@@ -50,8 +52,11 @@ public class Main {
                 }
                 System.out.println();
             }
-        }catch (InterruptedException | ProcessorException e){
-            System.out.println(e.getMessage());
+
+
+        }catch (ProcessorException e){
+            System.out.println("Run thrown " + e.getMessage());
+
         }
     }
 }

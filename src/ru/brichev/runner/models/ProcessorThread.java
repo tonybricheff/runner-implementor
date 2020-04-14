@@ -4,8 +4,9 @@ import ru.brichev.runner.interfaces.Processor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-public class ProcessorThread<T> extends Thread {
+public class ProcessorThread<T> implements Callable<T> {
     private final DataStore<T> dataStore;
     private final List<Processor<T>> processors;
     private final List<T> input;
@@ -20,11 +21,10 @@ public class ProcessorThread<T> extends Thread {
         this.maxIterations = maxIterations;
     }
 
-
     private boolean getStatus(Processor<T> processor) {
         input.clear();
         for (String id : processor.getInputIds()) {
-            T idOut = dataStore.get(id ,currentIteration);
+            T idOut = dataStore.get(id, currentIteration);
             if (idOut == null) {
                 return false;
             }
@@ -42,23 +42,21 @@ public class ProcessorThread<T> extends Thread {
 
 
     @Override
-    public void run() {
+    public T call() throws ProcessorException {
         for (currentIteration = 0; currentIteration < maxIterations; currentIteration++) {
             for (Processor<T> processor : processors) {
+                T result;
                 while (!getStatus(processor)) {
                     Thread.yield();
                 }
                 System.out.println(Thread.currentThread().toString() + " processor: " + processor.getId() + " iteration: " + (currentIteration + 1));
-                try {
-                    getInput(processor);
-                    input.add((T) processor.getLast());
-                    dataStore.add(processor.getId(), currentIteration, (T) processor.process(input));
-                    processor.setLast(processor.process(input));
-                } catch (ProcessorException e) {
-                    e.printStackTrace();
-                }
+                getInput(processor);
+                input.add((T) processor.getLast());
+                result = (T) processor.process(input);
+                dataStore.add(processor.getId(), currentIteration, result);
+                processor.setLast(processor.process(input));
             }
         }
+        return null;
     }
-
 }

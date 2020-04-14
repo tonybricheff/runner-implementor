@@ -8,14 +8,15 @@ import ru.brichev.runner.models.ProcessorException;
 import ru.brichev.runner.models.ProcessorThread;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
 
 
 public class RunnerImplementor<T> implements Runner<T> {
 
 
     @Override
-    public Map<String, List<T>> runProcessors(Set<Processor<T>> processors, int maxThreads, int maxIterations) throws ProcessorException, InterruptedException {
+    public Map<String, List<T>> runProcessors(Set<Processor<T>> processors, int maxThreads, int maxIterations) throws
+            ProcessorException {
 
         Map<String, List<T>> results = new HashMap<>();
         DependencyGraph<T> dependencyGraph = new DependencyGraph<>(processors);
@@ -31,10 +32,6 @@ public class RunnerImplementor<T> implements Runner<T> {
             throw new IllegalArgumentException("There are 0 threads");
         }
 
-        List<ProcessorThread<T>> workers = new ArrayList<>();
-
-        ExecutorService executorService;
-
         int threadsCounter = Math.max(1, Math.min(runOrder.size(), maxThreads));
         int partSize = runOrder.size() / threadsCounter;
         int restCounter = runOrder.size() % threadsCounter;
@@ -45,23 +42,33 @@ public class RunnerImplementor<T> implements Runner<T> {
             partitions.add(runOrder.subList(l, r));
             l = r;
         }
-        for (int i = 0; i < threadsCounter; i++) {
-            workers.add(new ProcessorThread<>(partitions.get(i), dataStore, maxIterations));
+
+        ExecutorService executorService = Executors.newFixedThreadPool(threadsCounter);
+
+        List<Future<T>> futures = new ArrayList<>();
+
+        try {
+            for (int i = 0; i < threadsCounter; i++) {
+                futures.add(executorService.submit(new ProcessorThread<T>(partitions.get(i), dataStore, maxIterations)));
+            }
+
+            executorService.shutdown();
+
+            try {
+                for (Future<T> future : futures) {
+                    future.get();
+                }
+            } catch (InterruptedException ignored) {
+            }
+
+            return results;
+        } catch (ExecutionException e) {
+            System.out.println(executorService.isShutdown());
+            throw new ProcessorException("Processor Exception", "");
         }
-
-        //dataStore.setProcessorThreads(workers);
-
-        for (int i = 0; i < threadsCounter; i++) {
-            workers.get(i).start();
-        }
-
-
-        for (int i = 0; i < threadsCounter; i++) {
-            workers.get(i).join();
-        }
-
-        return results;
     }
 
-
 }
+
+
+

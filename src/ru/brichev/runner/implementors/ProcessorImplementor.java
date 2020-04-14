@@ -46,10 +46,15 @@ public class ProcessorImplementor<T extends Integer> implements Processor<T> {
         for(T out : input){
             result += out.intValue();
         }
-        if(result == 18)
-            throw new ProcessorException("Тест", pid);
-        //if(result == 19)
-          //  return null;
+
+        //if(result == 14)
+          //  throw new ProcessorException("ban", pid);
+
+
+        /*if(result == 19)
+            return null;
+
+         */
         return result;
     }
 
