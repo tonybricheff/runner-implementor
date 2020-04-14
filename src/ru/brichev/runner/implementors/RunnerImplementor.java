@@ -49,7 +49,7 @@ public class RunnerImplementor<T> implements Runner<T> {
             workers.add(new ProcessorThread<>(partitions.get(i), dataStore, maxIterations));
         }
 
-        dataStore.setProcessorThreads(workers);
+        //dataStore.setProcessorThreads(workers);
 
         for (int i = 0; i < threadsCounter; i++) {
             workers.get(i).start();
@@ -60,15 +60,7 @@ public class RunnerImplementor<T> implements Runner<T> {
             workers.get(i).join();
         }
 
-        for (Map.Entry<String, List<T>> entry : results.entrySet()) {
-            System.out.print(entry.getKey() + ") ");
-            for (T it : entry.getValue()) {
-                System.out.print(it + " ");
-            }
-            System.out.println();
-        }
-
-        return null;
+        return results;
     }
 
 

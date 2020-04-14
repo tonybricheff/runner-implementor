@@ -19,7 +19,7 @@ public class Main {
         list2.add("1");
         list2.add("4");
         List<String> list3 = new ArrayList<>();
-        //list3.add("4");
+        list3.add("4");
         List<String> list4 = new ArrayList<>();
 
         ProcessorImplementor<Integer> processorImplementor1 = new ProcessorImplementor<>("1", list1);
