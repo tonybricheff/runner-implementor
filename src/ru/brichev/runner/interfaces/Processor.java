@@ -1,10 +1,14 @@
 package ru.brichev.runner.interfaces;
 
-import ru.brichev.runner.modules.ProcessorException;
+import ru.brichev.runner.models.ProcessorException;
 
 import java.util.List;
 
 public interface Processor<T> {
+
+    Integer getLast();
+
+    void setLast(Integer last);
 
     /**
      * @return processor id, immutable, unique among all instances, not null
@@ -23,6 +27,6 @@ public interface Processor<T> {
      * @return output of the processing, null if no output is produced
      * @throws ProcessorException if error occurs during processing
      */
-    T process(List<T> input) throws ProcessorException;
+    Integer process(List<T> input) throws ProcessorException;
 
 }
