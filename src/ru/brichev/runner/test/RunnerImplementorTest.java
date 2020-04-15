@@ -76,7 +76,6 @@ public class RunnerImplementorTest {
                 set.add(processorImplementor4);
 
                 results = runnerImplementor.runProcessors(set, i, 5);
-
                 Assert.assertEquals(expected, results);
 
             }

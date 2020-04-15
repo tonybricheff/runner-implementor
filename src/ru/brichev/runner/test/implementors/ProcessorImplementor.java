@@ -49,7 +49,6 @@ public class ProcessorImplementor implements Processor<java.lang.Integer> {
         }
 
 
-
         if(resultOfProcessing == 54) {
             return null;
         }
