@@ -20,7 +20,6 @@ public class Main {
         list2.add("4");
         List<String> list3 = new ArrayList<>();
         list3.add("4");
-        list1.add("14");
         List<String> list4 = new ArrayList<>();
 
         ProcessorImplementor processorImplementor1 = new ProcessorImplementor("1", list1);
@@ -43,7 +42,7 @@ public class Main {
 
         Map<String, List<Integer>> results;
         try {
-           results = runnerImplementor.runProcessors(set, 4, 5);
+           results = runnerImplementor.runProcessors(set, 5, 5);
 
             for (Map.Entry<String, List<Integer>> entry : results.entrySet()) {
                 System.out.print(entry.getKey() + ") ");

@@ -47,9 +47,15 @@ public class ProcessorImplementor implements Processor<java.lang.Integer> {
         //if(result == 14)
         //  throw new ProcessorException("ban", pid);
 
-        /*if(result == 19)
+        if(resultOfProcessing == 74) {
+            lastInput = 0;
             return null;
-         */
+        }
+
+
+
+
+
 
         return resultOfProcessing;
     }
