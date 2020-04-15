@@ -4,14 +4,20 @@ import ru.brichev.runner.interfaces.Processor;
 
 import java.util.*;
 
+//Oriented graph of Processors dependencies
+
 public class DependencyGraph<T> {
     private final int numVertices;
     private LinkedList<Integer>[] adjLists;
     private boolean cycle;
     private final int[] used;
     private final List<Processor<T>> topsorted;
+
+    //Map <Id, Processor>
     private Map<String, Processor<T>> processorIds;
 
+
+    //Constructor. Throw Processor Exception if there is an invalid input id
     public DependencyGraph(Set<Processor<T>> processors) throws ProcessorException {
         this.numVertices = processors.size();
         this.used = new int[numVertices];
@@ -40,6 +46,8 @@ public class DependencyGraph<T> {
         adjLists[from].add(to);
     }
 
+
+    //dfs with finding cycle support
     private void dfs(int v) {
         used[v] = 1;
         for (int i = 0; i < adjLists[v].size(); i++) {
@@ -53,6 +61,8 @@ public class DependencyGraph<T> {
         topsorted.add(processorIds.get(String.valueOf(v + 1)));
     }
 
+
+    //topological sort
     private void topsort() {
         Arrays.fill(used, 0);
         topsorted.clear();
@@ -63,6 +73,8 @@ public class DependencyGraph<T> {
 
     }
 
+
+    //return result of topsort or throw ProcessorException if graph contains cycle
     public List<Processor<T>> getProcessorsOrder() throws ProcessorException {
         topsort();
         if (cycle) {

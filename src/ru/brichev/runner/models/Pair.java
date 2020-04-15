@@ -1,6 +1,6 @@
 package ru.brichev.runner.models;
 
-
+//Pair of id and number of iteration which is used as a key in Hash Map
 public class Pair {
     private final String id;
     private final Integer iteration;
@@ -10,6 +10,7 @@ public class Pair {
         this.iteration = iteration;
     }
 
+    //Override of equals and hashcode to use Pair as a key in Hash map
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
