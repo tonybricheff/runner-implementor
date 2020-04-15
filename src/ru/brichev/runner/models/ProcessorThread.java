@@ -53,7 +53,10 @@ public class ProcessorThread<T> implements Callable<T> {
                     while (!getStatus(processor)) {
                         Thread.yield();
                     }
-                    System.out.println(Thread.currentThread().toString() + " processor: " + processor.getId() + " iteration: " + (currentIteration + 1));
+
+                    //Uncomment to check the order of iteration in parallel threads
+                    // System.out.println(Thread.currentThread().toString() + " processor: " + processor.getId() + " iteration: " + (currentIteration + 1));
+
                     getInput(processor);
                     result = processor.process(input);
                     dataStore.add(processor.getId(), currentIteration, result);

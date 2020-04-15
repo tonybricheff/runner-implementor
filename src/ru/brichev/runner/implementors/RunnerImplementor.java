@@ -23,11 +23,6 @@ public class RunnerImplementor<T> implements Runner<T> {
         List<Processor<T>> runOrder = dependencyGraph.getProcessorsOrder();
         DataStore<T> dataStore = new DataStore<>(results);
 
-
-        for (Processor<T> processor : runOrder)
-            System.out.print(processor.getId() + " ");
-        System.out.println();
-
         if (maxThreads == 0) {
             throw new IllegalArgumentException("There are 0 threads");
         }
