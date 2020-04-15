@@ -6,10 +6,6 @@ import java.util.List;
 
 public interface Processor<T> {
 
-    Integer getLast();
-
-    void setLast(Integer last);
-
     /**
      * @return processor id, immutable, unique among all instances, not null
      */
@@ -17,8 +13,8 @@ public interface Processor<T> {
 
     /**
      * @return a list of processors that have to be executed before this one
-     *         and whose results must be passed to Processor::process,
-     *         immutable, can be null or empty, both means no inputs
+     * and whose results must be passed to Processor::process,
+     * immutable, can be null or empty, both means no inputs
      */
     List<String> getInputIds();
 
@@ -27,6 +23,6 @@ public interface Processor<T> {
      * @return output of the processing, null if no output is produced
      * @throws ProcessorException if error occurs during processing
      */
-    Integer process(List<T> input) throws ProcessorException;
+    T process(List<T> input) throws ProcessorException;
 
 }

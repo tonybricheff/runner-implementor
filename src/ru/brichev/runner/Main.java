@@ -7,6 +7,7 @@ import ru.brichev.runner.models.ProcessorException;
 
 import java.util.*;
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -22,13 +23,13 @@ public class Main {
         list3.add("4");
         List<String> list4 = new ArrayList<>();
 
-        ProcessorImplementor<Integer> processorImplementor1 = new ProcessorImplementor<>("1", list1);
+        ProcessorImplementor processorImplementor1 = new ProcessorImplementor("1", list1);
 
-        ProcessorImplementor<Integer> processorImplementor2 = new ProcessorImplementor<>("2", list2);
+        ProcessorImplementor processorImplementor2 = new ProcessorImplementor("2", list2);
 
-        ProcessorImplementor<Integer> processorImplementor3 = new ProcessorImplementor<>("3", list3);
+        ProcessorImplementor processorImplementor3 = new ProcessorImplementor("3", list3);
 
-        ProcessorImplementor<Integer> processorImplementor4 = new ProcessorImplementor<>("4", list4);
+        ProcessorImplementor processorImplementor4 = new ProcessorImplementor("4", list4);
 
         RunnerImplementor<Integer> runnerImplementor = new RunnerImplementor<>();
 
@@ -42,7 +43,8 @@ public class Main {
 
         Map<String, List<Integer>> results;
         try {
-           results = runnerImplementor.runProcessors(set, 2, 5);
+           results = runnerImplementor.runProcessors(set, 4, 5);
+
             for (Map.Entry<String, List<Integer>> entry : results.entrySet()) {
                 System.out.print(entry.getKey() + ") ");
                 for (Integer it : entry.getValue()) {
@@ -50,8 +52,11 @@ public class Main {
                 }
                 System.out.println();
             }
-        }catch (InterruptedException | ProcessorException e){
-            System.out.println(e.getMessage());
+
+
+        }catch (ProcessorException e){
+            System.out.println("Run thrown " + e.getMessage());
+
         }
     }
 }
