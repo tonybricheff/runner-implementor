@@ -5,10 +5,20 @@ import java.util.*;
 public class DataStore<T> {
     private final Map<Pair, T> data;
     private final Map<String, List<T>> results;
+    private boolean isAlive;
 
     public DataStore(Map<String, List<T>> results) {
         this.results = results;
         this.data = new HashMap<>();
+        this.isAlive = true;
+    }
+
+    public synchronized void setStatus(boolean alive) {
+        isAlive = alive;
+    }
+
+    public synchronized boolean getStatus() {
+        return isAlive;
     }
 
     public synchronized void add(String pid, Integer iteration, T value) {

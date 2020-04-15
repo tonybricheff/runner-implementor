@@ -21,7 +21,7 @@ public class DependencyGraph<T> {
             processorIds.put(processor.getId(), processor);
             for (String inputId : processor.getInputIds()) {
                 if (Integer.parseInt(inputId) > numVertices || Integer.parseInt(inputId) < 1) {
-                    throw new ProcessorException("Invalid inputId detected: " + inputId, inputId);
+                    throw new ProcessorException("Invalid inputId detected:", inputId);
                 } else {
                     addEdge(Integer.parseInt(inputId) - 1, Integer.parseInt(processor.getId()) - 1);
                 }

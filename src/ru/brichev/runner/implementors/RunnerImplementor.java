@@ -61,14 +61,45 @@ public class RunnerImplementor<T> implements Runner<T> {
             } catch (InterruptedException ignored) {
             }
 
-            return results;
+            return validateResult(results, maxIterations);
         } catch (ExecutionException e) {
-            System.out.println(executorService.isShutdown());
-            throw new ProcessorException("Processor Exception", "");
+            throw new ProcessorException(e.getMessage(), "");
         }
     }
 
-}
 
+    private Map<String, List<T>> validateResult(Map<String, List<T>> results, Integer iterations) {
+
+        Map<String, List<T>> resultOfValidation = new HashMap<>();
+        boolean isNull = false;
+
+        for (int currentIteration = 0; currentIteration < iterations; currentIteration++) {
+            for (Map.Entry<String, List<T>> entry : results.entrySet()) {
+                T processorResult = entry.getValue().get(currentIteration);
+
+                if (processorResult == null) {
+                    if (currentIteration != 0) {
+                        isNull = true;
+                    } else {
+                        return new HashMap<>();
+                    }
+                }
+            }
+
+            if (!isNull) {
+                for (Map.Entry<String, List<T>> entry : results.entrySet()) {
+                    T processorResult = entry.getValue().get(currentIteration);
+                    if (!resultOfValidation.containsKey(entry.getKey())) {
+                        resultOfValidation.put(entry.getKey(), new ArrayList<>());
+                    }
+                    resultOfValidation.get(entry.getKey()).add(processorResult);
+                }
+            }
+
+        }
+        return resultOfValidation;
+    }
+
+}
 
 
