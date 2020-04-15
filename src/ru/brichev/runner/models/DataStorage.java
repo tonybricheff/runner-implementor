@@ -2,12 +2,19 @@ package ru.brichev.runner.models;
 
 import java.util.*;
 
-public class DataStore<T> {
+
+public class DataStorage<T> {
+
+    //Storage: Pair(id, iteration), output of Processor::process
     private final Map<Pair, T> data;
+
+    //Map with results of each processor iteration
     private final Map<String, List<T>> results;
+
+    //Status parameter
     private boolean isAlive;
 
-    public DataStore(Map<String, List<T>> results) {
+    public DataStorage(Map<String, List<T>> results) {
         this.results = results;
         this.data = new HashMap<>();
         this.isAlive = true;

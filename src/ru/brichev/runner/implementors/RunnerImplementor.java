@@ -2,7 +2,7 @@ package ru.brichev.runner.implementors;
 
 import ru.brichev.runner.interfaces.Processor;
 import ru.brichev.runner.interfaces.Runner;
-import ru.brichev.runner.models.DataStore;
+import ru.brichev.runner.models.DataStorage;
 import ru.brichev.runner.models.DependencyGraph;
 import ru.brichev.runner.models.ProcessorException;
 import ru.brichev.runner.models.ProcessorThread;
@@ -10,7 +10,7 @@ import ru.brichev.runner.models.ProcessorThread;
 import java.util.*;
 import java.util.concurrent.*;
 
-
+//Implementor of Runner
 public class RunnerImplementor<T> implements Runner<T> {
 
 
@@ -21,12 +21,7 @@ public class RunnerImplementor<T> implements Runner<T> {
         Map<String, List<T>> results = new HashMap<>();
         DependencyGraph<T> dependencyGraph = new DependencyGraph<>(processors);
         List<Processor<T>> runOrder = dependencyGraph.getProcessorsOrder();
-        DataStore<T> dataStore = new DataStore<>(results);
-
-
-        for (Processor<T> processor : runOrder)
-            System.out.print(processor.getId() + " ");
-        System.out.println();
+        DataStorage<T> dataStorage = new DataStorage<>(results);
 
         if (maxThreads == 0) {
             throw new IllegalArgumentException("There are 0 threads");
@@ -49,7 +44,7 @@ public class RunnerImplementor<T> implements Runner<T> {
 
         try {
             for (int i = 0; i < threadsCounter; i++) {
-                futures.add(executorService.submit(new ProcessorThread<>(partitions.get(i), dataStore, maxIterations)));
+                futures.add(executorService.submit(new ProcessorThread<>(partitions.get(i), dataStorage, maxIterations)));
             }
 
             executorService.shutdown();
@@ -67,7 +62,7 @@ public class RunnerImplementor<T> implements Runner<T> {
         }
     }
 
-
+    //Protect result from null in output
     private Map<String, List<T>> validateResult(Map<String, List<T>> results, Integer iterations) {
 
         Map<String, List<T>> resultOfValidation = new HashMap<>();
@@ -76,7 +71,6 @@ public class RunnerImplementor<T> implements Runner<T> {
         for (int currentIteration = 0; currentIteration < iterations; currentIteration++) {
             for (Map.Entry<String, List<T>> entry : results.entrySet()) {
                 T processorResult = entry.getValue().get(currentIteration);
-
                 if (processorResult == null) {
                     if (currentIteration != 0) {
                         isNull = true;

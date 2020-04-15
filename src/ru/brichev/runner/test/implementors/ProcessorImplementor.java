@@ -1,4 +1,4 @@
-package ru.brichev.runner.implementors;
+package ru.brichev.runner.test.implementors;
 
 import ru.brichev.runner.interfaces.Processor;
 import ru.brichev.runner.models.ProcessorException;
@@ -36,7 +36,6 @@ public class ProcessorImplementor implements Processor<java.lang.Integer> {
 
         int resultOfProcessing = 1;
 
-
         for (java.lang.Integer out : input) {
             resultOfProcessing += out;
         }
@@ -44,26 +43,15 @@ public class ProcessorImplementor implements Processor<java.lang.Integer> {
         resultOfProcessing += lastInput;
         lastInput = resultOfProcessing;
 
-        /*
-        if(resultOfProcessing == 14) {
+
+        if(resultOfProcessing == 40) {
               throw new ProcessorException("Error in processor:", pid);
         }
 
-         */
 
-        /*
-        if(resultOfProcessing == 74) {
-            lastInput = 0;
+        if(resultOfProcessing == 54) {
             return null;
         }
-
-         */
-
-
-
-
-
-
 
         return resultOfProcessing;
     }
