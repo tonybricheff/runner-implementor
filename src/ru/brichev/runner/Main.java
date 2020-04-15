@@ -12,7 +12,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         List<String> list1 = new ArrayList<>();
         list1.add("4");
         List<String> list2 = new ArrayList<>();
@@ -21,6 +20,7 @@ public class Main {
         list2.add("4");
         List<String> list3 = new ArrayList<>();
         list3.add("4");
+        list1.add("14");
         List<String> list4 = new ArrayList<>();
 
         ProcessorImplementor processorImplementor1 = new ProcessorImplementor("1", list1);
@@ -55,7 +55,7 @@ public class Main {
 
 
         }catch (ProcessorException e){
-            System.out.println("Run thrown " + e.getMessage());
+            System.out.println("Run thrown: " + e.getMessage());
 
         }
     }
