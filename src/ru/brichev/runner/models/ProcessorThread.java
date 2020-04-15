@@ -21,8 +21,11 @@ public class ProcessorThread<T> implements Callable<T> {
         this.maxIterations = maxIterations;
     }
 
-    private boolean getStatus(Processor<T> processor) {
+    private boolean getStatus(Processor<T> processor) throws ProcessorException {
         input.clear();
+        if (!dataStore.getStatus()) {
+            throw new ProcessorException("", "");
+        }
         for (String id : processor.getInputIds()) {
             T idOut = dataStore.get(id, currentIteration);
             if (idOut == null) {
@@ -46,13 +49,18 @@ public class ProcessorThread<T> implements Callable<T> {
         for (currentIteration = 0; currentIteration < maxIterations; currentIteration++) {
             for (Processor<T> processor : processors) {
                 T result;
-                while (!getStatus(processor)) {
-                    Thread.yield();
+                try {
+                    while (!getStatus(processor)) {
+                        Thread.yield();
+                    }
+                    System.out.println(Thread.currentThread().toString() + " processor: " + processor.getId() + " iteration: " + (currentIteration + 1));
+                    getInput(processor);
+                    result = processor.process(input);
+                    dataStore.add(processor.getId(), currentIteration, result);
+                } catch (ProcessorException e) {
+                    dataStore.setStatus(false);
+                    throw new ProcessorException(e.getMessage(), "");
                 }
-                System.out.println(Thread.currentThread().toString() + " processor: " + processor.getId() + " iteration: " + (currentIteration + 1));
-                getInput(processor);
-                result = processor.process(input);
-                dataStore.add(processor.getId(), currentIteration, result);
             }
         }
         return null;

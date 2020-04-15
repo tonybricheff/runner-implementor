@@ -63,8 +63,7 @@ public class RunnerImplementor<T> implements Runner<T> {
 
             return validateResult(results, maxIterations);
         } catch (ExecutionException e) {
-            System.out.println(executorService.isShutdown());
-            throw new ProcessorException("Processor Exception", "");
+            throw new ProcessorException(e.getMessage(), "");
         }
     }
 

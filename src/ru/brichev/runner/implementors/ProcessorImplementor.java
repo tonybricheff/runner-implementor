@@ -44,13 +44,21 @@ public class ProcessorImplementor implements Processor<java.lang.Integer> {
         resultOfProcessing += lastInput;
         lastInput = resultOfProcessing;
 
-        //if(result == 14)
-        //  throw new ProcessorException("ban", pid);
+        /*
+        if(resultOfProcessing == 14) {
+              throw new ProcessorException("Error in processor:", pid);
+        }
 
+         */
+
+        /*
         if(resultOfProcessing == 74) {
             lastInput = 0;
             return null;
         }
+
+         */
+
 
 
 
